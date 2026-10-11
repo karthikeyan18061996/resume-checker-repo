@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>0 → Shipped · Resume Parser</title>
+  <meta name="description" content="Upload a PDF resume and get a score, the skills it shows, and the skills it's missing." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#">
+        <span class="logo-badge">0→S</span>
+        <span class="logo-name">Shipped Resume Parser</span>
+      </a>
+      <nav class="site-nav">
+        <a href="#how">How it works</a>
+        <a href="#try">Try it</a>
+        <a class="btn primary small" href="#try">Upload resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <p class="eyebrow">0 → Shipped · Resume Parser</p>
+      <h1>Score any resume.<br /><span class="gradient">See what's missing.</span></h1>
+      <p class="sub">
+        Drop in a PDF and get an instant 0–100 score, the skills your resume
+        shows, and the ones recruiters search for that it doesn't.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#try">Analyze my resume</a>
+        <a class="btn ghost" href="#how">How scoring works</a>
+      </div>
+      <ul class="hero-meta">
+        <li>No signup</li>
+        <li>Runs in your browser</li>
+        <li>PDF up to 10 MB</li>
+      </ul>
+    </section>
+
+    <!-- Uploader -->
+    <section id="try" class="uploader">
+      <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Upload a PDF resume">
+        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2" />
+          <path d="M12 12v9" />
+          <path d="m16 16-4-4-4 4" />
+        </svg>
+        <p class="dz-title">Drop your resume here</p>
+        <p class="dz-sub">or <span class="linklike">browse files</span> · PDF only</p>
+        <input id="file-input" type="file" accept="application/pdf,.pdf" hidden />
+      </div>
+      <p id="upload-error" class="upload-error" hidden></p>
+
+      <!-- Fake pipeline progress -->
+      <div id="progress" class="card progress-card" hidden>
+        <div class="file-row">
+          <span class="file-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+            </svg>
+          </span>
+          <div>
+            <p id="progress-file" class="file-name"></p>
+            <p id="progress-size" class="file-size"></p>
+          </div>
+        </div>
+        <div class="bar"><div id="progress-bar" class="bar-fill"></div></div>
+        <p id="progress-step" class="progress-step">Reading file…</p>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results" class="results" hidden>
+      <div class="results-head">
+        <div>
+          <p class="eyebrow">Analysis complete</p>
+          <h2 id="results-file" class="results-file"></h2>
+        </div>
+        <button id="reset" class="btn ghost small" type="button">Analyze another</button>
+      </div>
+
+      <div class="results-grid">
+        <article class="card score-card">
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 128 128" aria-hidden="true">
+              <circle class="ring-track" cx="64" cy="64" r="54"></circle>
+              <defs>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#6d8bff"/>
+                  <stop offset="100%" stop-color="#8a5cff"/>
+                </linearGradient>
+              </defs>
+              <circle id="ring-fill" class="ring-fill" cx="64" cy="64" r="54" transform="rotate(-90 64 64)"></circle>
+            </svg>
+            <div class="score-readout">
+              <span id="score-value">0</span>
+              <span class="score-of">/ 100</span>
+            </div>
+          </div>
+          <p id="score-verdict" class="verdict"></p>
+          <p id="score-summary" class="score-summary"></p>
+        </article>
+
+        <div class="skills-cols">
+          <article class="card">
+            <h3>Skills present <span id="present-count" class="count ok"></span></h3>
+            <ul id="present-list" class="chips"></ul>
+          </article>
+          <article class="card">
+            <h3>Skills missing <span id="missing-count" class="count bad"></span></h3>
+            <ul id="missing-list" class="chips"></ul>
+          </article>
+        </div>
+      </div>
+
+      <p class="mock-note">
+        Mock build — the score is generated in the browser so the demo works
+        without a server. The logic lives in <code>mockAnalyze()</code> in
+        <code>script.js</code> and gets swapped for the real parser API later.
+      </p>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="how">
+      <h2>How it works</h2>
+      <div class="how-grid">
+        <article class="card step-card">
+          <p class="step-num">01</p>
+          <h3>Upload</h3>
+          <p>Drop a PDF resume. In this demo build nothing leaves your browser.</p>
+        </article>
+        <article class="card step-card">
+          <p class="step-num">02</p>
+          <h3>Parse &amp; match</h3>
+          <p>Text is extracted and matched against a tracked list of skills.</p>
+        </article>
+        <article class="card step-card">
+          <p class="step-num">03</p>
+          <h3>Score &amp; gaps</h3>
+          <p>Get a 0–100 score plus the skills present and the ones missing.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>0 → Shipped Resume Parser · demo build — no data leaves your browser</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
